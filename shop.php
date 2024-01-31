@@ -2,6 +2,8 @@
 
 namespace App;
 
+require_once 'vendor/autoload.php';
+
 use App\Model\Clothing;
 use App\Model\Electronic;
 
@@ -26,9 +28,9 @@ $electronicsList = $electronic->findAll();
   <h1>MY-LITTLE-MVC-SHOP</h1>
   <h2>Clothing</h2>
   <ul>
-    <?php foreach ($clothingsList as $clothing) : 
+    <?php foreach ($clothingsList as $clothing) :
       $clothingImages = $clothing->getPhotos();
-      ?>
+    ?>
       <li>
         <h3><?= $clothing->getName() ?></h3>
         <p><?= $clothing->getPrice() / 100 ?> €</p>
@@ -42,9 +44,8 @@ $electronicsList = $electronic->findAll();
   </ul>
   <h2>Electronic</h2>
   <ul>
-    <?php foreach ($electronicsList as $electronic) : 
+    <?php foreach ($electronicsList as $electronic) :
       $electronicImages = $electronic->getPhotos();
-
     ?>
 
       <li>
