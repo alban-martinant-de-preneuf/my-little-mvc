@@ -112,7 +112,7 @@ class Electronic extends AbstractProduct implements StockableInterface
                 new \DateTime($result['created_at']),
                 $result['updated_at'] ? (new \DateTime($result['updated_at'])) : null,
                 $result['brand'],
-                $result['waranty_fee'],
+                $result['warrantly_fee'],
             );
         }
 
