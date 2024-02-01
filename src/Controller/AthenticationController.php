@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+session_start();
+
 use App\Model\User;
 
 class AthenticationController
@@ -48,5 +50,10 @@ class AthenticationController
             'role' => $user->getRole(),
         ];
         header('Location: /my-little-mvc/shop.php');
+    }
+
+    public function profile(): bool
+    {
+        return isset($_SESSION['user']) ? true : false;
     }
 }
