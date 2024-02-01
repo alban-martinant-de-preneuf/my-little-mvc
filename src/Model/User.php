@@ -88,6 +88,26 @@ class User
         );
     }
 
+    public function findOneByEmail(string $email): static|false
+    {
+        $pdo = new \PDO('mysql:host=localhost;dbname=draft-shop', 'root', '');
+        $sql = "SELECT * FROM user WHERE email = :email";
+        $stmt = $pdo->prepare($sql);
+        $stmt->bindValue(':email', $email, \PDO::PARAM_STR);
+        $stmt->execute();
+        $result = $stmt->Fetch(\PDO::FETCH_ASSOC);
+        if (!$result) {
+            return false;
+        }
+        return new static(
+            $result['id'],
+            $result['fullname'],
+            $result['email'],
+            $result['password'],
+            json_decode($result['role']),
+        );
+    }
+
     public function findAll(): array
     {
         $pdo = new \PDO('mysql:host=localhost;dbname=draft-shop', 'root', '');
