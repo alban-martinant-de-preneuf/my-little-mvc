@@ -30,4 +30,23 @@ class AthenticationController
             ->setFullname($fullname)
             ->create();
     }
+
+    public function login(string $email, string $password): void
+    {
+        $user = new User();
+        $user = $user->findOneByEmail($email);
+        if (!$user) {
+            throw new \Exception('Les identifiants fournis ne correspondent à aucun utilisateur');
+        }
+        if (!password_verify($password, $user->getPassword())) {
+            throw new \Exception('Les identifiants fournis ne correspondent à aucun utilisateur');
+        }
+        $_SESSION['user'] = [
+            'id' => $user->getId(),
+            'fullname' => $user->getFullname(),
+            'email' => $user->getEmail(),
+            'role' => $user->getRole(),
+        ];
+        header('Location: /my-little-mvc/shop.php');
+    }
 }
