@@ -43,12 +43,7 @@ class AthenticationController
         if (!password_verify($password, $user->getPassword())) {
             throw new \Exception('Les identifiants fournis ne correspondent à aucun utilisateur');
         }
-        $_SESSION['user'] = [
-            'id' => $user->getId(),
-            'fullname' => $user->getFullname(),
-            'email' => $user->getEmail(),
-            'role' => $user->getRole(),
-        ];
+        $_SESSION['user'] = serialize($user);
         header('Location: /my-little-mvc/shop.php');
     }
 
