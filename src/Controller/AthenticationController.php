@@ -51,4 +51,28 @@ class AthenticationController
     {
         return isset($_SESSION['user']) ? true : false;
     }
+
+    public function updateProfile(string $email, string $fullname): void
+    {
+        $user = unserialize($_SESSION['user']);
+        $user->setEmail($email)
+            ->setFullname($fullname)
+            ->update();
+        $_SESSION['user'] = serialize($user);
+    }
+
+    public function updatePassword(string $password, string $confirmPassword): void
+    {
+        $user = unserialize($_SESSION['user']);
+        if ($password !== $confirmPassword) {
+            throw new \Exception('Les mots de passe ne correspondent pas');
+        }
+        // Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre
+        if (!filter_var($password, FILTER_VALIDATE_REGEXP, ['options' => ['regexp' => '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/']])) {
+            throw new \Exception('Mot de passe non valide (8 caractères minimum, une majuscule, une minuscule et un chiffre)');
+        }
+        $user->setPassword(password_hash($password, PASSWORD_DEFAULT))
+            ->update();
+        $_SESSION['user'] = serialize($user);
+    }
 }

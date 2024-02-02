@@ -11,10 +11,28 @@ if (isset($_POST['session_destroy'])) {
     header('Location: /my-little-mvc/login.php');
 }
 
+if (isset($_POST['update_profile'])) {
+    try {
+        $auth->updateProfile($_POST['email'], $_POST['fullname']);
+        $updateMessage = 'Profil modifié';
+    } catch (\Exception $e) {
+        $updateMessage = $e->getMessage();
+    }
+}
+
 if (!$auth->profile()) {
     header("refresh:2;url=login.php");
 } else {
     $user = unserialize($_SESSION['user']);
+}
+
+if (isset($_POST['update_pwd'])) {
+    try {
+        $auth->updatePassword($_POST['password'], $_POST['passwordConfirm']);
+        $pwdMessage = 'Mot de passe modifié';
+    } catch (\Exception $e) {
+        $pwdMessage = $e->getMessage();
+    }
 }
 
 ?>
@@ -50,14 +68,20 @@ if (!$auth->profile()) {
         </form>
 
         <h3>Modifier vos informations</h3>
+        <?php if (isset($updateMessage)) : ?>
+            <p><?= $updateMessage ?></p>
+        <?php endif; ?>
         <form action="" method="post">
             <label for="email">Email</label>
             <input type="email" name="email" id="email" value="<?= $user->getEmail() ?>" required>
             <label for="fullname">Nom complet</label>
             <input type="text" name="fullname" id="fullname" value="<?= $user->getFullname() ?>" required>
-            <input type="submit" name="update_infos" value="Modifier">
+            <input type="submit" name="update_profile" value="Modifier">
         </form>
         <h3>Modifier votre mot de passe</h3>
+        <?php if (isset($pwdMessage)) : ?>
+            <p><?= $pwdMessage ?></p>
+        <?php endif; ?>
         <form action="" method="post">
             <label for="password">Nouveau mot de passe</label>
             <input type="password" name="password" id="password" required>
